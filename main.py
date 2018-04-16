@@ -35,7 +35,7 @@ def loadImage(name):
     """ Loads the given image resource """
 
     image = pygame.image.load(getResourcePath("assets\\" + name))
-    image.convert
+    image.convert_alpha()
 
     return image
 
@@ -46,19 +46,13 @@ pygame.mixer.pre_init(44100, -16, 2, 2048)
 pygame.mixer.init()
 pygame.init()
 pygame.display.set_caption("Fourseal")
-screen = pygame.display.set_mode(SIZE)
+screen = pygame.display.set_mode((2*WIDTH, 2*HEIGHT))
 
 # Load images
 
-defaultImg = pygame.image.load(getResourcePath("assets\default.png"))
-defaultImg.convert()
-
-# Text file images
-
 textures = []
 
-for i in range(9):
-
+for i in range(16):
     textures.append(loadImage(str(i) + ".png"))
 
 # Create the sprite list
@@ -70,11 +64,7 @@ sprites = []
 theMap = readMapFile("0.4clmap")
 
 background = theMap.getBg(textures)
-
-# Create an array of Sprites to represent the background
-for ix in range(BOXES_WIDE):
-    for iy in range(BOXES_HIGH):
-        sprites.append( Sprite(BOX_SIZE*ix, BOX_SIZE*iy, defaultImg) )
+fgSprites = theMap.getFg(background, textures)
 
 while True:
 
@@ -89,7 +79,7 @@ while True:
 
     # Draw the hecking background
 
-    screen.blit(background, (0,0))
+    screen.blit(pygame.transform.scale(background, (2*WIDTH, 2*HEIGHT)), (0,0))
 
     # Draw the sprites to screen
     # Sprite.sort_depth(sprites)

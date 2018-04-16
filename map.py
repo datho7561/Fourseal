@@ -30,7 +30,7 @@ class Map:
 
         # Process data into memory as ints
         # TODO: read more than the first 9 lines
-        for i in range(BOXES_HIGH):
+        for i in range(2*BOXES_HIGH):
 
             # Clean up each line
             line = cleanedData[i].split(",")
@@ -40,7 +40,14 @@ class Map:
                 cleanedLine.append(int(element.strip()))
 
             # TODO: read the other information as well
-            self.background.append(cleanedLine)
+            if (i//BOXES_HIGH == 0):
+                self.background.append(cleanedLine)
+            elif (i//BOXES_HIGH == 1):
+                self.foreground.append(cleanedLine)
+            elif (i//BOXES_HIGH == 2):
+                self.decoration.append(cleanedLine)
+            else:
+                self.objects.append(cleanedLine)
 
     def pixelSpread(num):
         """ A logistic function to control where the pixels are placed.
@@ -54,7 +61,6 @@ class Map:
         bgImage = Surface(SIZE)
 
         for y in range(BOXES_HIGH):
-
             for x in range(BOXES_WIDE):
 
                 # Find the texture for this Sprite
@@ -110,8 +116,24 @@ class Map:
         return bgImage
 
 
-    def getFg():
+    def getFg(self, background, images):
         """ Returns a texture that represents the foreground, as well as a list
         of sprites that represent the objects that can be collided with. """
 
-        
+        # Holds all the sprites that will be used for collision with the player
+        fgSprites = []
+
+        for y in range(BOXES_HIGH):
+            for x in range(BOXES_WIDE):
+
+                textureNum = self.foreground[y][x]
+                texture = images[textureNum].copy()
+
+                drawingSprite = Sprite(BOX_SIZE * x, BOX_SIZE * (BOXES_HIGH-y-1), texture)
+                collisionSprite = Sprite(BOX_SIZE * x, BOX_SIZE * (BOXES_HIGH-y-1), texture)
+                fgSprites.append(collisionSprite)
+
+                if (textureNum != 0):
+                    drawingSprite.draw(background, shift=True)
+
+        return fgSprites

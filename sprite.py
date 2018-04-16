@@ -1,6 +1,8 @@
 # Author: David Thompson
 # Date: 5 April, 2018
 
+import random
+
 from pygame import Surface
 from constants import *
 
@@ -19,19 +21,26 @@ class Sprite:
             self.imgs = []
 
 
-    def draw(self, surface):
+    def draw(self, surface, shift=False):
         """ Draws this in place onto the given surface. Notice how this flips
         everything arouns so that the zero in the the y direction is
         in the bottom left of the screen. """
+
+        # Shift the texture off a bit randomly if it is set to
+        x_shift, y_shift = 0, 0
+        if shift:
+            x_shift, y_shift = random.randrange(-3,4), random.randrange(-3,4)
 
         try:
             if self.imgs == []:
                 raise IndexError
             else:
-                surface.blit(self.imgs[0], (int(self.x), surface.get_size()[1] - int(self.y) - BOX_SIZE))
+                surface.blit(self.imgs[0], (int(self.x) + x_shift,
+                            surface.get_size()[1] - int(self.y) - self.imgs[0].get_size()[1] + BOX_SIZE + y_shift))
 
         except TypeError as e:
-            surface.blit(self.imgs, (int(self.x), surface.get_size()[1] - int(self.y) - BOX_SIZE))
+            surface.blit(self.imgs, (int(self.x) + x_shift,
+                        surface.get_size()[1] - int(self.y) - self.imgs.get_size()[1] + y_shift))
 
 
     def distance(self, other):
