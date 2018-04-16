@@ -8,13 +8,9 @@
 
 import pygame, sys, os
 
-from Sprite import Sprite
-
-BOX_SIZE = 32
-
-BOXES_WIDE, BOXES_HIGH = 16, 9
-
-SIZE = WIDTH, HEIGHT = BOX_SIZE*BOXES_WIDE, BOX_SIZE*BOXES_HIGH
+from sprite import Sprite
+from map import Map
+from constants import *
 
 def getResourcePath(name):
     """ Function to get a resource that's in the same folder as the script """
@@ -30,29 +26,19 @@ def readMapFile(name):
 
     # Open the map file abd read it
     filepath = getResourcePath("maps\\" + name)
-    file = open(filepath, r)
-    file.read()
+    file = open(filepath, 'r')
+    data = file.read()
 
-    # Create variables to store the map information
-    background = []
-    foreground = []
-    decoration = []
-    objects = []
+    return Map(data)
 
-    # Go through and read the
-    for line in file:
+def loadImage(name):
+    """ Loads the given image resource """
 
-        # Clean up each line
-        line.split(",")
-        cleanedLine = []
+    image = pygame.image.load(getResourcePath("assets\\" + name))
+    image.convert
 
-        for element in line:
-            element.strip()
-            cleanedLine.append(int(element))
+    return image
 
-
-    # TODO: change to output four arrays: background, foreground, decorations, and game object links
-    return None
 
 ## INITIALIZE PYGAME ##
 
@@ -67,9 +53,23 @@ screen = pygame.display.set_mode(SIZE)
 defaultImg = pygame.image.load(getResourcePath("assets\default.png"))
 defaultImg.convert()
 
+# Text file images
+
+textures = []
+
+for i in range(9):
+
+    textures.append(loadImage(str(i) + ".png"))
+
 # Create the sprite list
 
 sprites = []
+
+# Load the default map with all the default textures
+
+theMap = readMapFile("0.4clmap")
+
+background = theMap.getBg(textures)
 
 # Create an array of Sprites to represent the background
 for ix in range(BOXES_WIDE):
@@ -87,9 +87,13 @@ while True:
 
     # TODO: code game logic and graphics
 
+    # Draw the hecking background
+
+    screen.blit(background, (0,0))
+
     # Draw the sprites to screen
-    Sprite.sort_depth(sprites)
-    for s in sprites:
-        s.draw(screen)
+    # Sprite.sort_depth(sprites)
+    # for s in sprites:
+    #     s.draw(screen)
 
     pygame.display.flip()

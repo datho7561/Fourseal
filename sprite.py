@@ -2,14 +2,12 @@
 # Date: 5 April, 2018
 
 from pygame import Surface
+from constants import *
 
 class Sprite:
 
     """ Represents an object that has a position on the screen and
     image that is associated with it """
-
-    global BOX_SIZE
-    BOX_SIZE = 32
 
     def __init__(self, xpos = 0, ypos = 0, images = None):
         """ Creates a new sprite. """
@@ -40,11 +38,17 @@ class Sprite:
         """ Finds the distance between this Sprite and another one. """
         return ((other.x-self.x)**2 + (other.y-self.y)**2)**(1/2)
 
+    def isColliding(self, other):
+        """ Checks if the two Sprites are colliding """
+        # TODO: prove that this actually works and isn't just spaghet
+        return (abs(self.x - other.x) < BOX_SIZE and abs(self.y - other.y) < BOX_SIZE)
+
+
     def sort_depth(sprites):
         """ Sorts a list of sprites so that they can be drawn from the back to the front. """
         sprites.sort(key = lambda sprite: sprite.y, reverse = True)
 
-
+# Used to test the class
 if __name__ == "__main__":
 
     mySprite = Sprite()
