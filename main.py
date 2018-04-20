@@ -8,7 +8,11 @@
 
 import pygame, sys, os
 
-from sprite import Sprite
+from sprite import Sprite, sortSprites
+from entity import Entity
+
+from direction import Direction
+
 from map import Map
 from constants import *
 
@@ -46,7 +50,7 @@ pygame.mixer.pre_init(44100, -16, 2, 2048)
 pygame.mixer.init()
 pygame.init()
 pygame.display.set_caption("Fourseal")
-screen = pygame.display.set_mode((2*WIDTH, 2*HEIGHT))
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 # Load images
 
@@ -55,16 +59,32 @@ textures = []
 for i in range(16):
     textures.append(loadImage(str(i) + ".png"))
 
-# Create the sprite list
+# Create the player(s)
 
-sprites = []
+# yummy yummy in my tummy
+# TODO: be less rediculous and less salty
+playerSprites = [textures[0], textures[0], textures[0], textures[0],
+                textures[0], textures[0], textures[0], textures[0]]
+
+player = Entity(playerSprites, BOX_SIZE, BOX_SIZE)
+
+# Initialize the keyboard key variables
+
+P1KEYS = [False, False, False, False]
 
 # Load the default map with all the default textures
 
 theMap = readMapFile("0.4clmap")
 
 background = theMap.getBg(textures)
-fgSprites = theMap.getFg(background, textures)
+fgSprites = theMap.getFg(textures)
+
+# Create the sprite list
+
+sprites = []
+
+sprites.append(player)
+sprites += fgSprites
 
 while True:
 
@@ -75,15 +95,76 @@ while True:
             # If the close button is pressed, exit the program
             sys.exit()
 
-    # TODO: code game logic and graphics
+        elif event.type == pygame.KEYDOWN:
 
-    # Draw the hecking background
+            if event.key == 119:
+                # If 'w' is pressed
+                P1KEYS[0] = True
+            elif event.key == 100:
+                # If 'd' is pressed
+                P1KEYS[1] = True
+            elif event.key == 115:
+                # If 's' is pressed
+                P1KEYS[2] = True
+            elif event.key == 97:
+                # If 'a' is pressed
+                P1KEYS[3] = True
 
-    screen.blit(pygame.transform.scale(background, (2*WIDTH, 2*HEIGHT)), (0,0))
+        elif event.type == pygame.KEYUP:
+
+            if event.key == 119:
+                # If 'w' is pressed
+                P1KEYS[0] = False
+            elif event.key == 100:
+                # If 'd' is pressed
+                P1KEYS[1] = False
+            elif event.key == 115:
+                # If 's' is pressed
+                P1KEYS[2] = False
+            elif event.key == 97:
+                # If 'a' is pressed
+                P1KEYS[3] = False
+
+
+    # TODO: code game logic
+    ## GAME LOGIC ##
+
+    # Interpret player input
+
+    # Player 1
+
+    player1Dir = None
+
+    if P1KEYS[0] and P1KEYS[1]:
+        player1Dir = Direction.UP_RIGHT
+    elif P1KEYS[1] and P1KEYS[2]:
+        player1Dir = Direction.DOWN_RIGHT
+    elif P1KEYS[2] and P1KEYS[3]:
+        player1Dir = Direction.DOWN_LEFT
+    elif P1KEYS[3] and P1KEYS[0]:
+        player1Dir = Direction.UP_LEFT
+    elif P1KEYS[0]:
+        player1Dir = Direction.UP
+    elif P1KEYS[1]:
+        player1Dir = Direction.RIGHT
+    elif P1KEYS[2]:
+        player1Dir = Direction.DOWN
+    elif P1KEYS[3]:
+        player1Dir = Direction.LEFT
+
+    if player1Dir != None:
+        player.move(player1Dir)
+
+    # TODO: draw everything
+    ## DRAW ##
+
+    # Draw the background
+    screen.blit(background, (0,0))
 
     # Draw the sprites to screen
-    # Sprite.sort_depth(sprites)
-    # for s in sprites:
-    #     s.draw(screen)
+    sortSprites(sprites)
+    for s in sprites:
+        s.draw(screen)
 
+    # Update the double buffer
     pygame.display.flip()

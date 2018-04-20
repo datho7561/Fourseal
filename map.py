@@ -116,7 +116,7 @@ class Map:
         return bgImage
 
 
-    def getFg(self, background, images):
+    def getFg(self, images):
         """ Returns a texture that represents the foreground, as well as a list
         of sprites that represent the objects that can be collided with. """
 
@@ -127,13 +127,16 @@ class Map:
             for x in range(BOXES_WIDE):
 
                 textureNum = self.foreground[y][x]
-                texture = images[textureNum].copy()
-
-                drawingSprite = Sprite(BOX_SIZE * x, BOX_SIZE * (BOXES_HIGH-y-1), texture)
-                collisionSprite = Sprite(BOX_SIZE * x, BOX_SIZE * (BOXES_HIGH-y-1), texture)
-                fgSprites.append(collisionSprite)
 
                 if (textureNum != 0):
-                    drawingSprite.draw(background, shift=True)
+
+                    texture = images[textureNum].copy()
+
+                    # If this block isn't water, randomly shift it
+                    toBeShifted = textureNum != 15
+
+                    collisionSprite = Sprite(BOX_SIZE * x, BOX_SIZE * (BOXES_HIGH-y-1),
+                                            texture, toBeShifted)
+                    fgSprites.append(collisionSprite)
 
         return fgSprites

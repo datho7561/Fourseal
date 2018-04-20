@@ -2,18 +2,19 @@
 # Date: 5 April, 2018
 
 from sprite import Sprite
+from direction import Direction
 
 class Entity(Sprite):
 
     """ Describes a being that can exist in the game, whether it's a player,
     enemy, or non-player character """
 
-    def __init__(self, xpos = 0, ypos = 0, images[], maxHealth = 100,
-                resistance = 20, damage = 25, range = 5, speed = 5):
+    def __init__(self, images, xpos = 0, ypos = 0, maxHealth = 100,
+                resistance = 20, damage = 25, range = 5, speed = 3, direction = 0):
         """ Creates a new entity. The default is a dummy at (0,0) """
 
         # Sets this up as a sprite
-        super(xpos, ypos, images[])
+        super().__init__(xpos, ypos, images)
 
         # Sets up additional variables
         self.maxHealth = maxHealth
@@ -23,6 +24,7 @@ class Entity(Sprite):
         self.damage = damage
         self.range = range
         self.speed = speed
+        self.direction = direction
         self.dead = False
 
 
@@ -50,6 +52,37 @@ class Entity(Sprite):
 
 
     def move(self, direction):
+        """ Move the entity in the given direction """
 
-        # TODO: make the guy hecking move
-        pass
+        # TODO: collision with the world, either here or in the main class
+
+        self.direction = direction.value
+
+        # Move the player in the desired direction
+        if direction == Direction.UP:
+            self.y += self.speed
+        elif direction == Direction.UP_RIGHT:
+            self.y += self.speed/2**(1/2)
+            self.x += self.speed/2**(1/2)
+        elif direction == Direction.RIGHT:
+            self.x += self.speed
+        elif direction == Direction.DOWN_RIGHT:
+            self.y -= self.speed/2**(1/2)
+            self.x += self.speed/2**(1/2)
+        elif direction == Direction.DOWN:
+            self.y -= self.speed
+        elif direction == Direction.DOWN_LEFT:
+            self.y -= self.speed/2**(1/2)
+            self.x -= self.speed/2**(1/2)
+        elif direction == Direction.LEFT:
+            self.x -= self.speed
+        elif direction == Direction.UP_LEFT:
+            self.y += self.speed/2**(1/2)
+            self.x -= self.speed/2**(1/2)
+
+    # OVERRIDES PARENT
+    def draw(self, surface):
+
+        # Select the texture that corresponds to the direction the entity is facing
+        texture = self.direction
+        super().draw(surface, textureNum = texture)

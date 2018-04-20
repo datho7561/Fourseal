@@ -9,7 +9,7 @@ global BOX_SIZE, BOXES_WIDE, BOXES_HIGH, WIDTH, HEIGHT, SIZE
 BOX_SIZE = 32
 
 # Number of boxes horizontally and veritcally
-BOXES_WIDE, BOXES_HIGH = 16, 9
+BOXES_WIDE, BOXES_HIGH = 32, 18
 
 # The size (width and height) of the window in pixels
 SIZE = WIDTH, HEIGHT = BOX_SIZE*BOXES_WIDE, BOX_SIZE*BOXES_HIGH
