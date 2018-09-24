@@ -1,0 +1,26 @@
+WHAT THE NUMBERS CORRESPOND TO:
+(All sets inclusive at both bounds)
+
+0: Empty (i.e. no tile)
+
+1-8: The background tiles
+
+9-15: The foreground tiles
+
+16-19: The decoration tiles
+
+20+: Special tiles
+
+STRUCTURE:
+
+There first three sets consist of comma separated values
+
+The first 9 rows represent the background sprites
+
+The next 9 rows represent the foreground sprites
+
+The next 9 rows represent the decoration sprites
+
+The next 9 rows represent placement of key game objects
+
+The next rows represent how the runes are linked

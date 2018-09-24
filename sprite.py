@@ -57,6 +57,18 @@ class Sprite:
         return ((other.x-self.x)**2 + (other.y-self.y)**2)**(1/2)
 
     def isColliding(self, other):
-        """ Checks if the two Sprites are colliding """
-        # TODO: prove that this actually works and isn't just spaghet
-        return (abs(self.x - other.x) < BOX_SIZE and abs(self.y - other.y) < BOX_SIZE)
+        """ Checks if Sprites are colliding """
+
+        try:
+            # If it is a list of sprites, go through them all, checking for collisions
+            collision = False
+            for s in other:
+                if (abs(self.x - s.x) < BOX_SIZE and abs(self.y - s.y) < BOX_SIZE):
+                    collision = True
+                    break
+
+            return collision
+
+        except:
+            # If it's just one sprite, just check it
+            return (abs(self.x - other.x) < BOX_SIZE and abs(self.y - other.y) < BOX_SIZE)

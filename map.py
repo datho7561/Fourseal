@@ -7,6 +7,11 @@ from constants import *
 
 import math, random
 
+def pixelSpread(num):
+        """ A quartic function to control where the pixels are placed.
+        Places most of the pixels near the edge. """
+        return num**4
+
 class Map:
 
     """ Holds the data for an entire game map, and allows the data to be read and accessed easily """
@@ -49,10 +54,6 @@ class Map:
             else:
                 self.objects.append(cleanedLine)
 
-    def pixelSpread(num):
-        """ A logistic function to control where the pixels are placed.
-        Places most of the pixels near the edge. """
-        return num**4
 
 
     def getBg(self, images):
@@ -89,7 +90,7 @@ class Map:
                             for i in range(numSpread):
 
                                 # Generate a number that is usually just less than 1
-                                gamma = Map.pixelSpread(random.random())
+                                gamma = pixelSpread(random.random())
 
                                 # Calculate the point
                                 if (q==(-1, 0)):
@@ -107,7 +108,7 @@ class Map:
 
                                 # “We don't make mistakes,
                                 #  just happy little accidents.” - Bob Ross
-                                texture.set_at((x_comp, y_comp), (20, 20, 20))
+                                texture.set_at((x_comp, y_comp), (30, 30, 30))
 
                 blockSprite = Sprite(BOX_SIZE * x, BOX_SIZE * (BOXES_HIGH-y-1), texture)
 

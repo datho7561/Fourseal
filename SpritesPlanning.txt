@@ -1,0 +1,33 @@
+GROUND BLOCKS:
+
+1. Grass            [DONE]
+2. Dirt             [DONE]
+3. Gravel           [TODO]
+4. Stone            [DONE]
+5. Grey Brick       [DONE]
+6. Brown Brick      [DONE]
+7. Sand             [DONE]
+8. Snow             [DONE]
+
+FOREGROUND BLOCKS (REQUIRE COLLISION WITH CHARACTER AND OVERLAP BAKCGROUND):
+
+1. Coniferous tree  [DONE]
+2. Shrub            [DONE]
+3. Vase             [TODO]
+4. Stone fence      [TODO]
+5. Pile of rock     [TODO]
+6. Stone wall       [TODO]
+7. Water            [DONE]
+
+DECORATION BLOCKS (DO NOT COLLIDE WITH CHARACTER):
+
+1. Dead bush        [DONE]
+2. Flowers          [TODO]
+3. Tall grass       [TODO]
+4. Torch -> Animate [TODO]
+
+GAME OBJECT BLOCKS (REQUIRE INTERATION WITH CHARACTER):
+
+1. Tuna             [TODO]
+2. Runes -> animate [TODO]
+3.

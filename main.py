@@ -1,6 +1,5 @@
 # Author: David Thompson
 # Date: 6 April, 2018
-
 # Note: Most of the code to interact with pygame such as the initialization
 #       and parts of the gameloop, as well as the getResourcePath function
 #       are copied from my FlapPY game: https://github.com/datho7561/FlapPY
@@ -10,6 +9,12 @@ import pygame, sys, os
 
 from sprite import Sprite, sortSprites
 from entity import Entity
+from player import Player
+from enemy import Enemy
+
+from foursealer import Foursealer
+from threemason import Threemason
+from dialic import Dialic
 
 from direction import Direction
 
@@ -59,18 +64,26 @@ textures = []
 for i in range(16):
     textures.append(loadImage(str(i) + ".png"))
 
+playerSprites = []
+
+for i in range(12):
+    playerSprites.append(loadImage("player\\player_" + str(i) + ".png"))
+
+# Create the fonts
+
+theFont = pygame.font.SysFont("monospace", 16)
+
+# TODO: add more players
 # Create the player(s)
 
-# yummy yummy in my tummy
-# TODO: be less rediculous and less salty
-playerSprites = [textures[0], textures[0], textures[0], textures[0],
-                textures[0], textures[0], textures[0], textures[0]]
+player = Dialic(playerSprites, BOX_SIZE, BOX_SIZE)
 
-player = Entity(playerSprites, BOX_SIZE, BOX_SIZE)
+# TODO: intellignet enemies that spawn periodically
+enemy = Enemy(playerSprites, 4*BOX_SIZE, 4*BOX_SIZE)
 
 # Initialize the keyboard key variables
-
-P1KEYS = [False, False, False, False]
+# W, D, A, S, Shift, Space
+P1KEYS = [False, False, False, False, False, False]
 
 # Load the default map with all the default textures
 
@@ -84,6 +97,7 @@ fgSprites = theMap.getFg(textures)
 sprites = []
 
 sprites.append(player)
+sprites.append(enemy)
 sprites += fgSprites
 
 while True:
@@ -109,6 +123,12 @@ while True:
             elif event.key == 97:
                 # If 'a' is pressed
                 P1KEYS[3] = True
+            elif event.key == 304:
+                # If 'Shift' is pressed
+                P1KEYS[4] = True
+            elif event.key == 32:
+                # If 'Space' is pressed
+                P1KEYS[5] = True
 
         elif event.type == pygame.KEYUP:
 
@@ -124,6 +144,12 @@ while True:
             elif event.key == 97:
                 # If 'a' is pressed
                 P1KEYS[3] = False
+            elif event.key == 304:
+                # If 'Shift' is pressed
+                P1KEYS[4] = False
+            elif event.key == 32:
+                # If 'Space' is pressed
+                P1KEYS[5] = False
 
 
     # TODO: code game logic
@@ -152,8 +178,15 @@ while True:
     elif P1KEYS[3]:
         player1Dir = Direction.LEFT
 
-    if player1Dir != None:
-        player.move(player1Dir)
+    # TODO: update all the players
+    # Update the players
+
+    if P1KEYS[5]:
+        player.attack([enemy])
+
+    player.update(player1Dir, fgSprites, [enemy], usingSpecial = P1KEYS[4])
+
+    enemy.update(None, fgSprites, [player])
 
     # TODO: draw everything
     ## DRAW ##
@@ -165,6 +198,13 @@ while True:
     sortSprites(sprites)
     for s in sprites:
         s.draw(screen)
+
+    # Draw the HUD
+    playerHealthHUD = theFont.render(str(player.health), 1, (255,0,255), (0,0,0))
+    enemyHealthHUD = theFont.render(str(enemy.health), 1, (255,0,255), (0,0,0))
+
+    screen.blit(playerHealthHUD, (0,0))
+    screen.blit(enemyHealthHUD, (250,0))
 
     # Update the double buffer
     pygame.display.flip()

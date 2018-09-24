@@ -1,0 +1,6 @@
+
+IMPORTANT DECISIONS I'VE COME TO:
+
+1. I'm going to prerender the background to prevent the CPU from melting my legs.
+
+2. I have a global constants file oh goodie woohoo!!!!
