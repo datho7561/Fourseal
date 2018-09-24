@@ -12,7 +12,7 @@ class Foursealer(Player):
                         maxHealth = 100,        # Values for character contants
                         resistance = 25,
                         damage = 50,
-                        range = 50,
+                        range = 60,
                         speed = 2,
                         attackSpeed = 45,
                         specialCooldown = 150)

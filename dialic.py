@@ -12,7 +12,7 @@ class Dialic(Player):
                         maxHealth = 100,        # Values for character contants
                         resistance = 15,
                         damage = 0,             # This value gets changed in this character
-                        range = 15,
+                        range = 35,
                         speed = 0,              # This value gets changed in this character
                         attackSpeed = 0,        # This value gets changed in this character
                         specialCooldown = 10)   # Almost instantaneous reactivation

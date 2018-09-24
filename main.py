@@ -76,9 +76,19 @@ theFont = pygame.font.SysFont("monospace", 16)
 # TODO: add more players
 # Create the player(s)
 
-player = Dialic(playerSprites, BOX_SIZE, BOX_SIZE)
+# TODO: let the player pick what they play as in a nicer way
+playerType = input("Please input (T)hreemason, (D)ialic, or (F)oursealer: ")
 
-# TODO: intellignet enemies that spawn periodically
+if (playerType == "T"):
+    player = Threemason(playerSprites, BOX_SIZE, BOX_SIZE)
+elif (playerType =="D"):
+    player = Dialic(playerSprites, BOX_SIZE, BOX_SIZE)
+elif (playerType == "F"):
+    player = Foursealer(playerSprites, BOX_SIZE, BOX_SIZE)
+else:
+    player = Foursealer(playerSprites, BOX_SIZE, BOX_SIZE)
+
+# TODO: intelligent enemies that spawn periodically
 enemy = Enemy(playerSprites, 4*BOX_SIZE, 4*BOX_SIZE)
 
 # Initialize the keyboard key variables
