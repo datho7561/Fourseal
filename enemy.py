@@ -14,7 +14,7 @@ class Enemy(Entity):
     def update(self, direction, obstacles, entities):
         """ Move this enemy according to its AI """
 
-        # Note that the passed movement direction is completley ignored
+        # Note that the passed movement direction is completely ignored
         direction = None
 
         if self.motionIsValid(self.direction, obstacles):

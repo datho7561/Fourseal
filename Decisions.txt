@@ -1,16 +1,16 @@
 
 IMPORTANT DECISIONS I'VE COME TO:
 
-1. I'm going to prerender the background to prevent the CPU from melting my legs.
+1. I'm going to prerender the background.
 
-2. I have a global constants file oh goodie woohoo!!!!
+2. I have a global constants file.
 
-3. Single player demo idea: tower defence with enemies with basic AI that come
+3. Single player demo: tower defence with enemies with basic AI that come
     from outside of map and move to center, attacking the tower. Must keep tower
     alive for a set amount of time to win. Enemy spawn rate increases as game
     progresses
 
-4. Create a temporary character select screen for the startup of the game
+   - Create a temporary character select screen for the startup of the game
 
 5. Minimalist appearance for the swords (basically a coloured stick), longer
     sticks for greater range

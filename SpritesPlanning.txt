@@ -30,4 +30,4 @@ GAME OBJECT BLOCKS (REQUIRE INTERATION WITH CHARACTER):
 
 1. Tuna             [TODO]
 2. Runes -> animate [TODO]
-3.
+3. Totem            [TODO]

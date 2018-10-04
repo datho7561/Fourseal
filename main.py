@@ -11,10 +11,17 @@ from sprite import Sprite, sortSprites
 from entity import Entity
 from player import Player
 from enemy import Enemy
+from pawn import Pawn
 
+from totem import Totem
+
+# Characters
 from foursealer import Foursealer
 from threemason import Threemason
 from dialic import Dialic
+
+# UI elements
+from damagebar import DamageBar
 
 from direction import Direction
 
@@ -49,6 +56,9 @@ def loadImage(name):
     return image
 
 
+# TODO: let the player pick what they play as in a nicer way
+playerType = input("Please input (T)hreemason, (D)ialic, or (F)oursealer: ")
+
 ## INITIALIZE PYGAME ##
 
 pygame.mixer.pre_init(44100, -16, 2, 2048)
@@ -65,6 +75,12 @@ for i in range(16):
     textures.append(loadImage(str(i) + ".png"))
 
 playerSprites = []
+totemSprites = []
+
+# TODO: make this less dumb e.g. only have one reference to the texture
+# TODO: make this an obelisk instead of a vase
+for i in range(12):
+    totemSprites.append(loadImage("vase.png"))
 
 for i in range(12):
     playerSprites.append(loadImage("player\\player_" + str(i) + ".png"))
@@ -76,9 +92,8 @@ theFont = pygame.font.SysFont("monospace", 16)
 # TODO: add more players
 # Create the player(s)
 
-# TODO: let the player pick what they play as in a nicer way
-playerType = input("Please input (T)hreemason, (D)ialic, or (F)oursealer: ")
 
+# TODO: let player pick in windowed app
 if (playerType == "T"):
     player = Threemason(playerSprites, BOX_SIZE, BOX_SIZE)
 elif (playerType =="D"):
@@ -88,8 +103,19 @@ elif (playerType == "F"):
 else:
     player = Foursealer(playerSprites, BOX_SIZE, BOX_SIZE)
 
+# TODO: read totem location and health from the map file
+totem = Totem(totemSprites, WIDTH//2, HEIGHT//2, 200)
+
 # TODO: intelligent enemies that spawn periodically
-enemy = Enemy(playerSprites, 4*BOX_SIZE, 4*BOX_SIZE)
+enemy = Pawn(playerSprites, 4*BOX_SIZE, 4*BOX_SIZE)
+
+# TODO: centralize UI creation
+
+# TODO: figure out how many players/enemies/other things
+#        there are and add health bars to all of them
+playerHB = DamageBar(0, 0)
+enemyHB = DamageBar(WIDTH - 80, 0)
+totemHB = DamageBar(WIDTH//2, 0)
 
 # Initialize the keyboard key variables
 # W, D, A, S, Shift, Space
@@ -108,6 +134,7 @@ sprites = []
 
 sprites.append(player)
 sprites.append(enemy)
+sprites.append(totem)
 sprites += fgSprites
 
 while True:
@@ -192,11 +219,12 @@ while True:
     # Update the players
 
     if P1KEYS[5]:
-        player.attack([enemy])
+        # TODO: player shouldn't be able to attack totem
+        player.attack([enemy, totem])
 
     player.update(player1Dir, fgSprites, [enemy], usingSpecial = P1KEYS[4])
 
-    enemy.update(None, fgSprites, [player])
+    enemy.update(None, fgSprites, [player, totem])
 
     # TODO: draw everything
     ## DRAW ##
@@ -209,12 +237,18 @@ while True:
     for s in sprites:
         s.draw(screen)
 
-    # Draw the HUD
-    playerHealthHUD = theFont.render(str(player.health), 1, (255,0,255), (0,0,0))
-    enemyHealthHUD = theFont.render(str(enemy.health), 1, (255,0,255), (0,0,0))
+    # DRAW THE HUD #
 
-    screen.blit(playerHealthHUD, (0,0))
-    screen.blit(enemyHealthHUD, (250,0))
+    # TODO: Draw image representations of the players faces
+    # TODO: automate health bar drawing of everyone
+
+    playerHB.update(player)
+    enemyHB.update(enemy)
+    totemHB.update(totem)
+
+    playerHB.draw(screen)
+    enemyHB.draw(screen)
+    totemHB.draw(screen)
 
     # Update the double buffer
     pygame.display.flip()

@@ -47,7 +47,7 @@ class Sprite:
                 surface.blit(self.imgs[textureNum], (int(self.x) + self.xShift,
                             surface.get_size()[1] - int(self.y) - self.imgs[textureNum].get_size()[1] + self.yShift))
 
-        except TypeError as e:
+        except TypeError:
             surface.blit(self.imgs, (int(self.x) + self.xShift,
                         surface.get_size()[1] - int(self.y) - self.imgs.get_size()[1] + self.yShift))
 

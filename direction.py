@@ -19,3 +19,10 @@ def opposite(direction):
     """ Returns the direction opposite this one """
     # FIXME: More wizardry
     return Direction((direction.value + 4) % 8)
+
+
+def dirsAsArray():
+    return (Direction.UP, Direction.UP_RIGHT, Direction.RIGHT,
+           Direction.DOWN_RIGHT, Direction.DOWN,
+           Direction.DOWN_LEFT, Direction.LEFT,
+           Direction.UP_LEFT)

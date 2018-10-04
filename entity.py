@@ -47,9 +47,10 @@ class Entity(Sprite):
         """ Attacks all entities within range of this one. Kills them if
         they need to be dead. Returns True if the attack is successful. """
 
-        # TODO: make the entity only attack in fron of them
+        # TODO: make the entity only attack in front of themselves
 
-        if self.attackTimer == 0:
+        # The entity needs to be alive and cooled down to attack
+        if not self.dead and self.attackTimer == 0:
 
             for e in entities:
 

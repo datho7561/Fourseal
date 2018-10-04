@@ -2,6 +2,7 @@
 # Date: 11 April, 2018
 
 from entity import Entity
+from totem import Totem
 
 class Player(Entity):
 
@@ -23,6 +24,21 @@ class Player(Entity):
 
         return direction
 
+
+    # OVERRIDE
+    def attack(self, entities):
+
+        # A player should not be able to kill their own totem, because
+        #  defending the totem is the objective of the player when the
+        #  totem is present
+
+        filteredEntities = []
+        
+        for e in entities:
+            if (not isinstance(e, Totem)):
+                filteredEntities.append(e)
+
+        super().attack(filteredEntities)
 
     # OVERRIDE
     def update(self, direction, obstacles, entities, usingSpecial):
