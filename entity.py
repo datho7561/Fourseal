@@ -43,7 +43,7 @@ class Entity(Sprite):
         self.y = newY
 
 
-    def attack(self, entities):
+    def attack(self, entities, obstacles):
         """ Attacks all entities within range of this one. Kills them if
         they need to be dead. Returns True if the attack is successful. """
 
@@ -54,7 +54,8 @@ class Entity(Sprite):
 
             for e in entities:
 
-                if self.distance(e) < self.range:
+                # If this entity isn't itself and its within range
+                if not self is e and self.distance(e) < self.range:
                     e.health -= self.damage - e.resistance
 
                     if e.health <= 0:
@@ -62,6 +63,9 @@ class Entity(Sprite):
                         self.killsSinceDeath += 1
                         e.dead = True
                         e.killsSinceDeath = 0
+                    
+                    for kb in range (0, 50):
+                        e.move(self.direction, obstacles)
 
             self.attackTimer = self.attackSpeed
 

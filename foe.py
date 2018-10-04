@@ -7,7 +7,7 @@ from entity import Entity
 class Foe(Entity):
     
     # OVERRIDE
-    def attack(self, entities):
+    def attack(self, entities, obstacles):
 
         # Find all the non-foe entities when attacking,
         #  and only allow the foe to attack them, not its own kin
@@ -18,4 +18,4 @@ class Foe(Entity):
             if (not isinstance(e, Foe)):
                 filteredEntities.append(e)
 
-        super().attack(filteredEntities)
+        super().attack(filteredEntities, obstacles)

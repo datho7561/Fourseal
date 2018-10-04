@@ -7,18 +7,25 @@
 
 import pygame, sys, os
 
+from random import randint, random
+
 from sprite import Sprite, sortSprites
 from entity import Entity
-from player import Player
-from enemy import Enemy
-from pawn import Pawn
 
+from player import Player
+
+# Totem
 from totem import Totem
 
 # Characters
 from foursealer import Foursealer
 from threemason import Threemason
 from dialic import Dialic
+
+# Baddies
+from pawn import Pawn
+from rook import Rook
+from enemy import Enemy
 
 # UI elements
 from damagebar import DamageBar
@@ -54,6 +61,26 @@ def loadImage(name):
     image.convert_alpha()
 
     return image
+
+def borderCoords():
+    """ Gives a randon coordinate pair along the borders """
+
+    # generate a random number to indicate side
+    side = randint(1, 4)
+
+    # intepret results
+    if (side == 1):
+        # TOP
+        return (int(random() * WIDTH), 0)
+    elif (side == 2):
+        # RIGHT
+        return (WIDTH, int(random() * HEIGHT))
+    elif (side == 3):
+        # BOTTOM
+        return (int(random() * WIDTH), HEIGHT)
+    else:
+        # LEFT
+        return (0, int(random() * HEIGHT))
 
 
 # TODO: let the player pick what they play as in a nicer way
@@ -107,14 +134,14 @@ else:
 totem = Totem(totemSprites, WIDTH//2, HEIGHT//2, 200)
 
 # TODO: intelligent enemies that spawn periodically
-enemy = Pawn(playerSprites, 4*BOX_SIZE, 4*BOX_SIZE)
+enemies = []
+enemyCooldown = ENEMY_TIME
 
 # TODO: centralize UI creation
 
 # TODO: figure out how many players/enemies/other things
 #        there are and add health bars to all of them
 playerHB = DamageBar(0, 0)
-enemyHB = DamageBar(WIDTH - 80, 0)
 totemHB = DamageBar(WIDTH//2, 0)
 
 # Initialize the keyboard key variables
@@ -133,9 +160,14 @@ fgSprites = theMap.getFg(textures)
 sprites = []
 
 sprites.append(player)
-sprites.append(enemy)
 sprites.append(totem)
 sprites += fgSprites
+
+# Create the entity list
+entities = []
+
+entities.append(player)
+entities.append(totem)
 
 while True:
 
@@ -220,19 +252,51 @@ while True:
 
     if P1KEYS[5]:
         # TODO: player shouldn't be able to attack totem
-        player.attack([enemy, totem])
+        player.attack(entities, fgSprites)
 
-    player.update(player1Dir, fgSprites, [enemy], usingSpecial = P1KEYS[4])
+    player.update(player1Dir, fgSprites, entities, usingSpecial = P1KEYS[4])
 
-    enemy.update(None, fgSprites, [player, totem])
+    # If it is time to add another foes, add one
+    if (enemyCooldown == 0):
 
-    # TODO: draw everything
+        # Chose type of enemy
+        typeNewEnemy = randint(0, 19)
+
+        # Figure out where the foe goes
+        newEnemyX, newEnemyY = borderCoords()
+
+        # Make the enemy
+        # TODO: make other types of enemies appear
+
+        # Rook, which follows player, is rarer than pawn
+        if (typeNewEnemy == 19):
+            newEnemy = Rook(playerSprites, newEnemyX, newEnemyY)
+        else:
+            newEnemy = Pawn(playerSprites, newEnemyX, newEnemyY)
+
+        # Add the new foe to the necessary lists
+        enemies.append(newEnemy)
+        sprites.append(newEnemy)
+        entities.append(newEnemy)
+
+        enemyCooldown = ENEMY_TIME
+
+    else:
+        # Otherwise just count down
+        enemyCooldown -= 1
+
+    for enemy in enemies:
+        enemy.update(None, fgSprites, entities)
+
+    
     ## DRAW ##
 
-    # Draw the background
+    # TODO: draw everything
+
+    # DRAW THE BACKGROUND #
     screen.blit(background, (0,0))
 
-    # Draw the sprites to screen
+    # DRAW THE SPRITES #
     sortSprites(sprites)
     for s in sprites:
         s.draw(screen)
@@ -243,11 +307,9 @@ while True:
     # TODO: automate health bar drawing of everyone
 
     playerHB.update(player)
-    enemyHB.update(enemy)
     totemHB.update(totem)
 
     playerHB.draw(screen)
-    enemyHB.draw(screen)
     totemHB.draw(screen)
 
     # Update the double buffer

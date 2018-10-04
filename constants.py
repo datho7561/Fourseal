@@ -13,3 +13,6 @@ BOXES_WIDE, BOXES_HIGH = 32, 18
 
 # The size (width and height) of the window in pixels
 SIZE = WIDTH, HEIGHT = BOX_SIZE*BOXES_WIDE, BOX_SIZE*BOXES_HIGH
+
+# How fast the enemies spawn
+ENEMY_TIME = 120

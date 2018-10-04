@@ -31,7 +31,7 @@ class Foursealer(Player):
             
 
             # Attack during the dash at four time the speed
-            if self.attack(entities):
+            if self.attack(entities, obstacles):
                 self.attackTimer = self.attackSpeed // 4
             
             # If the player is still moving forward, prevent them from changing directions

@@ -1,20 +1,21 @@
 # Author: David Thompson
 # Date: 3 October, 2018
+# Purpose: Like the Pawn, except it goes after the player, goes faster, and hits stronger
 
 from constants import *
 from entity import Entity
 from sprite import Sprite
 from direction import Direction
 from direction import perpendicular, opposite, dirsAsArray
-from totem import Totem
 from foe import Foe
+from player import Player
 import random
 
 
-class Pawn(Foe):
+class Rook(Foe):
 
     def __init__(self, images, xpos = 0, ypos = 0, maxHealth = 80,
-                resistance = 0, damage = 25, range = 5, speed = .5,
+                resistance = 0, damage = 30, range = 5, speed = .8,
                 attackSpeed = 45, direction = None):
         # Want same properties except make the default really slow
         super().__init__(images, xpos, ypos, maxHealth,
@@ -40,7 +41,7 @@ class Pawn(Foe):
         totem = None
 
         for e in entities:
-            if (isinstance(e, Totem)):
+            if (isinstance(e, Player)):
                 totem = e
 
         # The goal is to get to the totem and attack it

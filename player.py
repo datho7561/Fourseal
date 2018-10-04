@@ -26,7 +26,7 @@ class Player(Entity):
 
 
     # OVERRIDE
-    def attack(self, entities):
+    def attack(self, entities, obstacles):
 
         # A player should not be able to kill their own totem, because
         #  defending the totem is the objective of the player when the
@@ -38,7 +38,7 @@ class Player(Entity):
             if (not isinstance(e, Totem)):
                 filteredEntities.append(e)
 
-        super().attack(filteredEntities)
+        super().attack(filteredEntities, obstacles)
 
     # OVERRIDE
     def update(self, direction, obstacles, entities, usingSpecial):
