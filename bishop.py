@@ -24,7 +24,8 @@ class Bishop(Foe):
 
     # OVERRIDE
     def update(self, direction, obstacles, entities):
-        """ Move this enemy according to its AI """
+        """ Move this enemy according to its AI. This is the same algorithm as the pawn,
+            just targetting the player """
 
         # Note that the passed movement direction is completely ignored.
         #  Movement and actions are controlled by the AI
@@ -37,45 +38,40 @@ class Bishop(Foe):
             if (self.motionIsValid(d, obstacles)):
                 possibleDirections.append(d)
 
-        # Find the totem in the list of entities
-        totem = None
+        # Find the player in the list of entities
+        player = None
 
         for e in entities:
             if (isinstance(e, Player)):
-                totem = e
+                player = e
 
-        # The goal is to get to the totem and attack it
-        #  This pawn has poor path finding. It just goes in which ever direction
-        #  gets it closest to the totem, which can get it stuck
+        if (player == None):
 
-        # If they can successfully attack the totem, do so
-        #  If you are getting a NoneType error, it is because a totem wasn't passed here
-        if (self.distance(totem) < self.range):
+            # The player is not present or dead, so don't bother moving
+            direction = None
 
+        elif (self.distance(player) < self.range):
+
+            # If they can successfully attack the player, do so
             self.attack(entities, obstacles)
 
         else:
 
-            # Need to get to the totem
+            # Need to get to the player
 
             # For each direction, make a dummy sprite and check if this
             #  direction gets the pawn closer. Find the best direction
-            #  to go to get to the totem
+            #  to go to get to the player
 
-            shortDir = possibleDirections[0]
+            direction = possibleDirections[0]
             shortDist = 400000000000 # Really big number
 
             for dir in possibleDirections:
                 xChange, yChange = self.getChangeFromDir(dir)
                 dummySprite = Sprite(self.x + xChange, self.y + yChange)
-                if dummySprite.distance(totem) < shortDist:
-                    shortDist = dummySprite.distance(totem)
-                    shortDir = dir
-            
-            # Set the direction to go to the shortest distance
-            # TODO: make more efficient by having only one direction variable
-            direction = shortDir
-
+                if dummySprite.distance(player) < shortDist:
+                    shortDist = dummySprite.distance(player)
+                    direction = dir
         
         super().update(direction, obstacles, entities)
 

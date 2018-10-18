@@ -290,6 +290,25 @@ while True:
     for enemy in enemies:
         enemy.update(None, fgSprites, entities)
 
+    # Remove dead entities from list
+    allDeadRemoved = False
+
+    while not allDeadRemoved:
+
+        # Find the first dead entity in the list
+        toRemove = None
+        for e in entities:
+            if e.dead:
+                toRemove = e
+                break
+        
+        if toRemove == None:
+            # If no dead entities were found, flag for the loop to end
+            allDeadRemoved = True
+        else:
+            # Otherwise remove the found entity and proceed with the loop
+            entities.remove(toRemove)
+    
     
     ## DRAW ##
 

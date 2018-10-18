@@ -47,10 +47,15 @@ class Pawn(Foe):
         #  This pawn has poor path finding. It just goes in which ever direction
         #  gets it closest to the totem, which can get it stuck
 
-        # If they can successfully attack the totem, do so
-        #  If you are getting a NoneType error, it is because a totem wasn't passed here
-        if (self.distance(totem) < self.range):
+        
+        if (totem == None):
 
+            # Totem is dead. GG. No need to move
+            direction = None
+
+        elif (self.distance(totem) < self.range):
+
+            # If they can successfully attack the totem, do so
             self.attack(entities, obstacles)
 
         else:
@@ -61,7 +66,7 @@ class Pawn(Foe):
             #  direction gets the pawn closer. Find the best direction
             #  to go to get to the totem
 
-            shortDir = possibleDirections[0]
+            direction = possibleDirections[0]
             shortDist = 400000000000 # Really big number
 
             for dir in possibleDirections:
@@ -69,13 +74,8 @@ class Pawn(Foe):
                 dummySprite = Sprite(self.x + xChange, self.y + yChange)
                 if dummySprite.distance(totem) < shortDist:
                     shortDist = dummySprite.distance(totem)
-                    shortDir = dir
-            
-            # Set the direction to go to the shortest distance
-            # TODO: make more efficient by having only one direction variable
-            direction = shortDir
-
-        
+                    direction = dir
+  
         super().update(direction, obstacles, entities)
 
 
