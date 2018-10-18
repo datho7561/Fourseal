@@ -12,10 +12,10 @@ from player import Player
 import random
 
 
-class Rook(Foe):
+class Bishop(Foe):
 
     def __init__(self, images, xpos = 0, ypos = 0, maxHealth = 80,
-                resistance = 0, damage = 30, range = 5, speed = .8,
+                resistance = 0, damage = 30, range = 5, speed = 1.2,
                 attackSpeed = 45, direction = None):
         # Want same properties except make the default really slow
         super().__init__(images, xpos, ypos, maxHealth,

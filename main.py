@@ -7,6 +7,7 @@
 
 import pygame, sys, os
 
+from pygame import Color
 from random import randint, random
 
 from sprite import Sprite, sortSprites
@@ -24,7 +25,7 @@ from dialic import Dialic
 
 # Baddies
 from pawn import Pawn
-from rook import Rook
+from bishop import Bishop
 from enemy import Enemy
 
 # UI elements
@@ -102,13 +103,13 @@ for i in range(16):
     textures.append(loadImage(str(i) + ".png"))
 
 playerSprites = []
-totemSprites = []
 
-# TODO: make this less dumb e.g. only have one reference to the texture
-# TODO: make this an obelisk instead of a vase
-for i in range(12):
-    totemSprites.append(loadImage("vase.png"))
+totemSprite = loadImage("totem.png")
+pawnSprite = loadImage("pawn\\pawn_0.png")
+bishopSprite = loadImage("bishop\\bishop_0.png")
 
+# "Player" Sprites
+# TODO: replace with individual character's textures
 for i in range(12):
     playerSprites.append(loadImage("player\\player_" + str(i) + ".png"))
 
@@ -131,7 +132,7 @@ else:
     player = Foursealer(playerSprites, BOX_SIZE, BOX_SIZE)
 
 # TODO: read totem location and health from the map file
-totem = Totem(totemSprites, WIDTH//2, HEIGHT//2, 200)
+totem = Totem(totemSprite, WIDTH//2, HEIGHT//2, 200)
 
 # TODO: intelligent enemies that spawn periodically
 enemies = []
@@ -142,6 +143,7 @@ enemyCooldown = ENEMY_TIME
 # TODO: figure out how many players/enemies/other things
 #        there are and add health bars to all of them
 playerHB = DamageBar(0, 0)
+playerCDB = DamageBar(0, 20, 10, Color(200, 200, 255), Color("blue"))
 totemHB = DamageBar(WIDTH//2, 0)
 
 # Initialize the keyboard key variables
@@ -150,7 +152,7 @@ P1KEYS = [False, False, False, False, False, False]
 
 # Load the default map with all the default textures
 
-theMap = readMapFile("0.4clmap")
+theMap = readMapFile("1.4clmap")
 
 background = theMap.getBg(textures)
 fgSprites = theMap.getFg(textures)
@@ -260,7 +262,7 @@ while True:
     if (enemyCooldown == 0):
 
         # Chose type of enemy
-        typeNewEnemy = randint(0, 19)
+        typeNewEnemy = randint(0, 9)
 
         # Figure out where the foe goes
         newEnemyX, newEnemyY = borderCoords()
@@ -268,11 +270,11 @@ while True:
         # Make the enemy
         # TODO: make other types of enemies appear
 
-        # Rook, which follows player, is rarer than pawn
-        if (typeNewEnemy == 19):
-            newEnemy = Rook(playerSprites, newEnemyX, newEnemyY)
+        # Bishop, which follows player, is rarer than pawn
+        if (typeNewEnemy == 9):
+            newEnemy = Bishop(bishopSprite, newEnemyX, newEnemyY)
         else:
-            newEnemy = Pawn(playerSprites, newEnemyX, newEnemyY)
+            newEnemy = Pawn(pawnSprite, newEnemyX, newEnemyY)
 
         # Add the new foe to the necessary lists
         enemies.append(newEnemy)
@@ -307,9 +309,11 @@ while True:
     # TODO: automate health bar drawing of everyone
 
     playerHB.update(player)
+    playerCDB.update(player.attackTimer / player.attackSpeed)
     totemHB.update(totem)
-
+    
     playerHB.draw(screen)
+    playerCDB.draw(screen)
     totemHB.draw(screen)
 
     # Update the double buffer

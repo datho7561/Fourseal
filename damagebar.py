@@ -39,6 +39,10 @@ class DamageBar:
             self.fraction = value.health / value.maxHealth
         else:
             self.fraction = value
+        
+        # Fraction should be at most 1
+        if (self.fraction > 1):
+            self.fraction = 1
 
     def draw(self, other):
 

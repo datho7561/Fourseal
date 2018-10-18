@@ -3,6 +3,7 @@
 
 from sprite import Sprite
 from direction import Direction
+from direction import opposite
 from constants import *
 
 class Entity(Sprite):
@@ -33,6 +34,8 @@ class Entity(Sprite):
         self.dead = False
         self.step = 0
         self.attackTimer = 0
+        self.recoilTimer = 0
+        self.reDir = None
 
 
     def setPos(self, newX, newY):
@@ -58,14 +61,15 @@ class Entity(Sprite):
                 if not self is e and self.distance(e) < self.range:
                     e.health -= self.damage - e.resistance
 
+                    # If the entity gets killed, 
                     if e.health <= 0:
-                        e.health = 0
-                        self.killsSinceDeath += 1
-                        e.dead = True
-                        e.killsSinceDeath = 0
-                    
-                    for kb in range (0, 50):
-                        e.move(self.direction, obstacles)
+                        e.health = 0                # make sure health isn't negative
+                        self.killsSinceDeath += 1   # increment the killer's kills since death
+                        e.dead = True               # set the other entity to dead
+                        e.killsSinceDeath = 0       # the other entity's kill count is zero
+                    else:
+                        e.recoilTimer = RECOIL      # The entity must face recoil
+                        e.reDir = self.direction    # Pass own direction as entities recoil
 
             self.attackTimer = self.attackSpeed
 
@@ -126,15 +130,59 @@ class Entity(Sprite):
             self.step = 0
 
 
+    def recoil(self, obstacles):
+        """ Move the player backwards due to a previous attack """
+
+        yChange = 0
+        xChange = 0
+
+        # Figure out what change in coords is necessary for the recoil
+        if self.reDir == Direction.UP:
+            yChange = RECOIL_SPEED
+        elif self.reDir == Direction.UP_RIGHT:
+            yChange = RECOIL_SPEED/2**(1/2)
+            xChange = RECOIL_SPEED/2**(1/2)
+        elif self.reDir == Direction.RIGHT:
+            xChange = RECOIL_SPEED
+        elif self.reDir == Direction.DOWN_RIGHT:
+            yChange = -RECOIL_SPEED/2**(1/2)
+            xChange = RECOIL_SPEED/2**(1/2)
+        elif self.reDir == Direction.DOWN:
+            yChange = -RECOIL_SPEED
+        elif self.reDir == Direction.DOWN_LEFT:
+            yChange = -RECOIL_SPEED/2**(1/2)
+            xChange = -RECOIL_SPEED/2**(1/2)
+        elif self.reDir == Direction.LEFT:
+            xChange = -RECOIL_SPEED
+        elif self.reDir == Direction.UP_LEFT:
+            yChange = RECOIL_SPEED/2**(1/2)
+            xChange = -RECOIL_SPEED/2**(1/2)
+
+        # Apply vertical movement. If this means it is now colliding,
+        #  snap to grid vertically.
+        self.y += yChange
+        if self.isColliding(obstacles):
+            self.y = int(self.y/BOX_SIZE)*BOX_SIZE + round(self.y/BOX_SIZE - int(self.y/BOX_SIZE))*BOX_SIZE
+
+        # Same except horizontally
+        self.x += xChange
+        if self.isColliding(obstacles):
+            self.x = int(self.x/BOX_SIZE)*BOX_SIZE + round(self.x/BOX_SIZE - int(self.x/BOX_SIZE))*BOX_SIZE
+
+
     def update(self, direction, obstacles, entities):
         """ Update this entity: do everything that doesn't involve drawing.
         Should be performed every frame """
 
         # TODO: handle attacking and prevent movement during attack
 
-        if (self.attackTimer == 0):
+        if (self.recoilTimer > 0):
+            self.recoilTimer -= 1 # Adavance to next fram of recoil
+            self.recoil(obstacles) # Perform the recoil action
+        elif (self.attackTimer == 0):
             self.move(direction, obstacles)
         else:
+            self.move(direction, obstacles)
             self.attackTimer -= 1
 
 

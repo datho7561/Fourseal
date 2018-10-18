@@ -8,7 +8,8 @@ class Totem(Entity):
     def __init__(self, images, xpos, ypos, health):
         """ Make a totem with given location and health """
 
-        super().__init__(images, xpos, ypos)
+        # Speed is zero so that nothing can move this totem
+        super().__init__(images, xpos, ypos, speed=0)
 
     # OVERRIDE
     def attack(self):

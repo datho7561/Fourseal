@@ -30,7 +30,7 @@ class Foursealer(Player):
                 self.move(self.direction, obstacles)
             
 
-            # Attack during the dash at four time the speed
+            # Attack during the dash at four times the speed
             if self.attack(entities, obstacles):
                 self.attackTimer = self.attackSpeed // 4
             

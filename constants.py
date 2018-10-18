@@ -3,7 +3,7 @@
 
 # This module holds a lot of important game variables that must be accessed by multiple classes
 
-global BOX_SIZE, BOXES_WIDE, BOXES_HIGH, WIDTH, HEIGHT, SIZE
+global BOX_SIZE, BOXES_WIDE, BOXES_HIGH, WIDTH, HEIGHT, SIZE, ENEMY_TIME, RECOIL
 
 # The width/height of a standard block
 BOX_SIZE = 32
@@ -16,3 +16,7 @@ SIZE = WIDTH, HEIGHT = BOX_SIZE*BOXES_WIDE, BOX_SIZE*BOXES_HIGH
 
 # How fast the enemies spawn
 ENEMY_TIME = 120
+
+# How much entities get knocked back
+RECOIL = 8
+RECOIL_SPEED = 8
