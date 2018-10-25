@@ -18,12 +18,12 @@ class Dialic(Player):
                         specialCooldown = 10)   # Almost instantaneous reactivation
 
         self.strengthMoveSpeed = 2
-        self.strengthAttackSpeed = 30
+        self.strengthAttackSpeed = 25
         self.strengthDamage = 35
 
         self.speedMoveSpeed = 6
         self.speedAttackSpeed = 3
-        self.speedDamage = 20
+        self.speedDamage = 0
 
         self.speed = self.speedMoveSpeed
         self.attackSpeed = self.speedAttackSpeed

@@ -29,7 +29,7 @@ class Pawn(Foe):
         #  Movement and actions are controlled by the AI
         direction = None
 
-        # Find all the the directions that yield vlaid motion
+        # Find all the the directions that yield valid motion
         possibleDirections = []
 
         for d in dirsAsArray():
@@ -58,7 +58,9 @@ class Pawn(Foe):
             # If they can successfully attack the totem, do so
             self.attack(entities, obstacles)
 
-        else:
+        elif (possibleDirections != None):
+
+            # If this entity can make a valid motion
 
             # Need to get to the totem
 

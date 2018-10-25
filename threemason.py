@@ -13,7 +13,7 @@ class Threemason(Player):
                         resistance = 15,
                         damage = 50,
                         range = 40,
-                        speed = 4,
+                        speed = 2.5,
                         attackSpeed = 30,
                         specialCooldown = 150)
 

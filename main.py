@@ -110,12 +110,10 @@ bishopSprite = loadImage("bishop\\bishop_0.png")
 
 # "Player" Sprites
 # TODO: replace with individual character's textures
-for i in range(12):
-    playerSprites.append(loadImage("player\\player_" + str(i) + ".png"))
+playerSprite = loadImage("player\\player_0.png")
 
-# Create the fonts
-
-theFont = pygame.font.SysFont("monospace", 16)
+# This font is used for game over
+theFont = pygame.font.SysFont("Consolas", 250)
 
 # TODO: add more players
 # Create the player(s)
@@ -123,13 +121,13 @@ theFont = pygame.font.SysFont("monospace", 16)
 
 # TODO: let player pick in windowed app
 if (playerType == "T"):
-    player = Threemason(playerSprites, BOX_SIZE, BOX_SIZE)
+    player = Threemason(playerSprite, BOX_SIZE, BOX_SIZE)
 elif (playerType =="D"):
-    player = Dialic(playerSprites, BOX_SIZE, BOX_SIZE)
+    player = Dialic(playerSprite, BOX_SIZE, BOX_SIZE)
 elif (playerType == "F"):
-    player = Foursealer(playerSprites, BOX_SIZE, BOX_SIZE)
+    player = Foursealer(playerSprite, BOX_SIZE, BOX_SIZE)
 else:
-    player = Foursealer(playerSprites, BOX_SIZE, BOX_SIZE)
+    player = Foursealer(playerSprite, BOX_SIZE, BOX_SIZE)
 
 # TODO: read totem location and health from the map file
 totem = Totem(totemSprite, WIDTH//2, HEIGHT//2, 200)
@@ -171,169 +169,193 @@ entities = []
 entities.append(player)
 entities.append(totem)
 
+
+
+# Main loop
+
+gameRunning = True
+
 while True:
 
     pygame.time.Clock().tick(75)
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            # If the close button is pressed, exit the program
-            sys.exit()
+    if gameRunning:
 
-        elif event.type == pygame.KEYDOWN:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                # If the close button is pressed, exit the program
+                sys.exit()
 
-            if event.key == 119:
-                # If 'w' is pressed
-                P1KEYS[0] = True
-            elif event.key == 100:
-                # If 'd' is pressed
-                P1KEYS[1] = True
-            elif event.key == 115:
-                # If 's' is pressed
-                P1KEYS[2] = True
-            elif event.key == 97:
-                # If 'a' is pressed
-                P1KEYS[3] = True
-            elif event.key == 304:
-                # If 'Shift' is pressed
-                P1KEYS[4] = True
-            elif event.key == 32:
-                # If 'Space' is pressed
-                P1KEYS[5] = True
+            elif event.type == pygame.KEYDOWN:
 
-        elif event.type == pygame.KEYUP:
+                if event.key == 119:
+                    # If 'w' is pressed
+                    P1KEYS[0] = True
+                elif event.key == 100:
+                    # If 'd' is pressed
+                    P1KEYS[1] = True
+                elif event.key == 115:
+                    # If 's' is pressed
+                    P1KEYS[2] = True
+                elif event.key == 97:
+                    # If 'a' is pressed
+                    P1KEYS[3] = True
+                elif event.key == 304:
+                    # If 'Shift' is pressed
+                    P1KEYS[4] = True
+                elif event.key == 32:
+                    # If 'Space' is pressed
+                    P1KEYS[5] = True
 
-            if event.key == 119:
-                # If 'w' is pressed
-                P1KEYS[0] = False
-            elif event.key == 100:
-                # If 'd' is pressed
-                P1KEYS[1] = False
-            elif event.key == 115:
-                # If 's' is pressed
-                P1KEYS[2] = False
-            elif event.key == 97:
-                # If 'a' is pressed
-                P1KEYS[3] = False
-            elif event.key == 304:
-                # If 'Shift' is pressed
-                P1KEYS[4] = False
-            elif event.key == 32:
-                # If 'Space' is pressed
-                P1KEYS[5] = False
+            elif event.type == pygame.KEYUP:
+
+                if event.key == 119:
+                    # If 'w' is pressed
+                    P1KEYS[0] = False
+                elif event.key == 100:
+                    # If 'd' is pressed
+                    P1KEYS[1] = False
+                elif event.key == 115:
+                    # If 's' is pressed
+                    P1KEYS[2] = False
+                elif event.key == 97:
+                    # If 'a' is pressed
+                    P1KEYS[3] = False
+                elif event.key == 304:
+                    # If 'Shift' is pressed
+                    P1KEYS[4] = False
+                elif event.key == 32:
+                    # If 'Space' is pressed
+                    P1KEYS[5] = False
 
 
-    # TODO: code game logic
-    ## GAME LOGIC ##
+        # TODO: code game logic
+        ## GAME LOGIC ##
 
-    # Interpret player input
+        # Interpret player input
 
-    # Player 1
+        # Player 1
 
-    player1Dir = None
+        player1Dir = None
 
-    if P1KEYS[0] and P1KEYS[1]:
-        player1Dir = Direction.UP_RIGHT
-    elif P1KEYS[1] and P1KEYS[2]:
-        player1Dir = Direction.DOWN_RIGHT
-    elif P1KEYS[2] and P1KEYS[3]:
-        player1Dir = Direction.DOWN_LEFT
-    elif P1KEYS[3] and P1KEYS[0]:
-        player1Dir = Direction.UP_LEFT
-    elif P1KEYS[0]:
-        player1Dir = Direction.UP
-    elif P1KEYS[1]:
-        player1Dir = Direction.RIGHT
-    elif P1KEYS[2]:
-        player1Dir = Direction.DOWN
-    elif P1KEYS[3]:
-        player1Dir = Direction.LEFT
+        if P1KEYS[0] and P1KEYS[1]:
+            player1Dir = Direction.UP_RIGHT
+        elif P1KEYS[1] and P1KEYS[2]:
+            player1Dir = Direction.DOWN_RIGHT
+        elif P1KEYS[2] and P1KEYS[3]:
+            player1Dir = Direction.DOWN_LEFT
+        elif P1KEYS[3] and P1KEYS[0]:
+            player1Dir = Direction.UP_LEFT
+        elif P1KEYS[0]:
+            player1Dir = Direction.UP
+        elif P1KEYS[1]:
+            player1Dir = Direction.RIGHT
+        elif P1KEYS[2]:
+            player1Dir = Direction.DOWN
+        elif P1KEYS[3]:
+            player1Dir = Direction.LEFT
 
-    # TODO: update all the players
-    # Update the players
+        # TODO: update all the players
+        # Update the players
 
-    if P1KEYS[5]:
-        # TODO: player shouldn't be able to attack totem
-        player.attack(entities, fgSprites)
+        if P1KEYS[5]:
+            # TODO: player shouldn't be able to attack totem
+            player.attack(entities, fgSprites)
 
-    player.update(player1Dir, fgSprites, entities, usingSpecial = P1KEYS[4])
+        player.update(player1Dir, fgSprites, entities, usingSpecial = P1KEYS[4])
 
-    # If it is time to add another foes, add one
-    if (enemyCooldown == 0):
+        # If it is time to add another foes, add one
+        if (enemyCooldown == 0):
 
-        # Chose type of enemy
-        typeNewEnemy = randint(0, 9)
+            # Chose type of enemy
+            typeNewEnemy = randint(0, 9)
 
-        # Figure out where the foe goes
-        newEnemyX, newEnemyY = borderCoords()
+            # Figure out where the foe goes
+            newEnemyX, newEnemyY = borderCoords()
 
-        # Make the enemy
-        # TODO: make other types of enemies appear
+            # Make the enemy
+            # TODO: make other types of enemies appear
 
-        # Bishop, which follows player, is rarer than pawn
-        if (typeNewEnemy == 9):
-            newEnemy = Bishop(bishopSprite, newEnemyX, newEnemyY)
+            # Bishop, which follows player, is rarer than pawn
+            if (typeNewEnemy == 9):
+                newEnemy = Bishop(bishopSprite, newEnemyX, newEnemyY)
+            else:
+                newEnemy = Pawn(pawnSprite, newEnemyX, newEnemyY)
+
+            # Add the new foe to the necessary lists
+            enemies.append(newEnemy)
+            sprites.append(newEnemy)
+            entities.append(newEnemy)
+
+            enemyCooldown = ENEMY_TIME
+
         else:
-            newEnemy = Pawn(pawnSprite, newEnemyX, newEnemyY)
+            # Otherwise just count down
+            enemyCooldown -= 1
 
-        # Add the new foe to the necessary lists
-        enemies.append(newEnemy)
-        sprites.append(newEnemy)
-        entities.append(newEnemy)
+        for enemy in enemies:
+            enemy.update(None, fgSprites, entities)
 
-        enemyCooldown = ENEMY_TIME
+        # Remove dead entities from list
+        allDeadRemoved = False
+
+        while not allDeadRemoved:
+
+            # Find the first dead entity in the list
+            toRemove = None
+            for e in entities:
+                if e.dead:
+                    toRemove = e
+                    break
+            
+            if toRemove == None:
+                # If no dead entities were found, flag for the loop to end
+                allDeadRemoved = True
+            else:
+                # Otherwise remove the found entity and proceed with the loop
+                entities.remove(toRemove)
+        
+        
+        ## DRAW ##
+
+        # TODO: draw everything
+
+        # DRAW THE BACKGROUND #
+        screen.blit(background, (0,0))
+
+        # DRAW THE SPRITES #
+        sortSprites(sprites)
+        for s in sprites:
+            s.draw(screen)
+
+        # DRAW THE HUD #
+
+        # TODO: Draw image representations of the players faces
+        # TODO: automate health bar drawing of everyone
+
+        playerHB.update(player)
+        playerCDB.update(player.attackTimer / player.attackSpeed)
+        totemHB.update(totem)
+        
+        playerHB.draw(screen)
+        playerCDB.draw(screen)
+        totemHB.draw(screen)
+
+        # Draw the GAME OVER
+        if (player.dead or totem.dead):
+            txtPlacement = (WIDTH // 2) - (theFont.size("FAILURE")[0] // 2)
+            screen.blit(theFont.render("FAILURE", False, Color("red")), (txtPlacement,HEIGHT//2-125))
+            gameRunning = False
+
+
+        # Update the double buffer
+        pygame.display.flip()
 
     else:
-        # Otherwise just count down
-        enemyCooldown -= 1
 
-    for enemy in enemies:
-        enemy.update(None, fgSprites, entities)
+        # If the game is complete wait for exit
 
-    # Remove dead entities from list
-    allDeadRemoved = False
-
-    while not allDeadRemoved:
-
-        # Find the first dead entity in the list
-        toRemove = None
-        for e in entities:
-            if e.dead:
-                toRemove = e
-                break
-        
-        if toRemove == None:
-            # If no dead entities were found, flag for the loop to end
-            allDeadRemoved = True
-        else:
-            # Otherwise remove the found entity and proceed with the loop
-            entities.remove(toRemove)
-    
-    
-    ## DRAW ##
-
-    # TODO: draw everything
-
-    # DRAW THE BACKGROUND #
-    screen.blit(background, (0,0))
-
-    # DRAW THE SPRITES #
-    sortSprites(sprites)
-    for s in sprites:
-        s.draw(screen)
-
-    # DRAW THE HUD #
-
-    # TODO: Draw image representations of the players faces
-    # TODO: automate health bar drawing of everyone
-
-    playerHB.update(player)
-    playerCDB.update(player.attackTimer / player.attackSpeed)
-    totemHB.update(totem)
-    
-    playerHB.draw(screen)
-    playerCDB.draw(screen)
-    totemHB.draw(screen)
-
-    # Update the double buffer
-    pygame.display.flip()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                # If the close button is pressed, exit the program
+                sys.exit()

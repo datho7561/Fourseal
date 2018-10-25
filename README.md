@@ -32,6 +32,15 @@ This game is written in python 3 with pygame, which means that to run it you wil
     * You will be prompted to enter a letter representing the class you pick before the game launches
     * Once you have done this, the game should have launched. Have fun!
 
+## FAQ
+__Q:__ Why am I an oddly-shaped shrubbery?
+
+__A:__ You are, in fact, not a shrubbery, but a poorly drawn jubejube.
+
+__Q:__ Why, then, am I a jubejube?
+
+__A:__ Many of the images in the game are placeholders. I have worked on the back end of animating the characters, but haven't put in the time to create all the images needed to animate the characters. I expect that this will take some time for me to get around to.
+
 ## DEVELOPMENT
 
 This game is currently incredibly rough around the edges:

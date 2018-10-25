@@ -26,7 +26,7 @@ class Foursealer(Player):
             #  when the special was initiated. Move them 3 times what they
             #  normally would move. Note that this prevents clipping
             #  through walls because the player is moving in short steps
-            for i in range(3):
+            for i in range(5):
                 self.move(self.direction, obstacles)
             
 

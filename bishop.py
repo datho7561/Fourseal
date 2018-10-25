@@ -55,7 +55,9 @@ class Bishop(Foe):
             # If they can successfully attack the player, do so
             self.attack(entities, obstacles)
 
-        else:
+        elif (possibleDirections != None):
+
+            # If there is a direction this entity can go
 
             # Need to get to the player
 
