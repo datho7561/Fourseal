@@ -39,17 +39,13 @@ from constants import *
 def getResourcePath(name):
     """ Function to get a resource that's in the same folder as the script """
 
-    # Important for pyinstaller
-    if getattr(sys, 'frozen', False):
-        return (os.path.realpath(sys._MEIPASS)[0:len(os.path.realpath(sys._MEIPASS))-len(os.path.basename(sys._MEIPASS))] + name)
-    else:
-        return (os.path.realpath(__file__)[0:len(os.path.realpath(__file__))-len(os.path.basename(__file__))] + name)
+    return os.path.join(os.path.realpath(__file__)[0:len(os.path.realpath(__file__))-len(os.path.basename(__file__))], name)
 
 def readMapFile(name):
     """ Given the file name, reads the corresponding map file and loads it into memory. """
 
     # Open the map file abd read it
-    filepath = getResourcePath("maps\\" + name)
+    filepath = getResourcePath(os.path.join("maps", name))
     file = open(filepath, 'r')
     data = file.read()
 
@@ -58,7 +54,7 @@ def readMapFile(name):
 def loadImage(name):
     """ Loads the given image resource """
 
-    image = pygame.image.load(getResourcePath("assets\\" + name))
+    image = pygame.image.load(getResourcePath(os.path.join("assets", name)))
     image.convert_alpha()
 
     return image
@@ -105,12 +101,12 @@ for i in range(16):
 playerSprites = []
 
 totemSprite = loadImage("totem.png")
-pawnSprite = loadImage("pawn\\pawn_0.png")
-bishopSprite = loadImage("bishop\\bishop_0.png")
+pawnSprite = loadImage(os.path.join("pawn", "pawn_0.png"))
+bishopSprite = loadImage(os.path.join("bishop", "bishop_0.png"))
 
 # "Player" Sprites
 # TODO: replace with individual character's textures
-playerSprite = loadImage("player\\player_0.png")
+playerSprite = loadImage(os.path.join("player", "player_0.png"))
 
 # This font is used for game over
 theFont = pygame.font.SysFont("Consolas", 250)
