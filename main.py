@@ -29,6 +29,7 @@ from bishop import Bishop
 from enemy import Enemy
 
 # UI elements
+from menu import menu
 from damagebar import DamageBar
 
 from direction import Direction
@@ -80,8 +81,6 @@ def borderCoords():
         return (0, int(random() * HEIGHT))
 
 
-# TODO: let the player pick what they play as in a nicer way
-playerType = input("Please input (T)hreemason, (D)ialic, or (F)oursealer: ")
 
 ## INITIALIZE PYGAME ##
 
@@ -115,16 +114,6 @@ theFont = pygame.font.SysFont("Consolas", 250)
 # Create the player(s)
 
 
-# TODO: let player pick in windowed app
-if (playerType == "T"):
-    player = Threemason(playerSprite, BOX_SIZE, BOX_SIZE)
-elif (playerType =="D"):
-    player = Dialic(playerSprite, BOX_SIZE, BOX_SIZE)
-elif (playerType == "F"):
-    player = Foursealer(playerSprite, BOX_SIZE, BOX_SIZE)
-else:
-    player = Foursealer(playerSprite, BOX_SIZE, BOX_SIZE)
-
 # TODO: read totem location and health from the map file
 totem = Totem(totemSprite, WIDTH//2, HEIGHT//2, 200)
 
@@ -155,16 +144,32 @@ fgSprites = theMap.getFg(textures)
 
 sprites = []
 
-sprites.append(player)
 sprites.append(totem)
 sprites += fgSprites
 
 # Create the entity list
 entities = []
 
-entities.append(player)
 entities.append(totem)
 
+# Character select loop
+playerType = menu(screen)
+
+# TODO: Finish character and game setup before starting the game
+
+
+# TODO: let player pick in windowed app
+if (playerType == "T"):
+    player = Threemason(playerSprite, BOX_SIZE, BOX_SIZE)
+elif (playerType =="D"):
+    player = Dialic(playerSprite, BOX_SIZE, BOX_SIZE)
+elif (playerType == "F"):
+    player = Foursealer(playerSprite, BOX_SIZE, BOX_SIZE)
+else:
+    player = Foursealer(playerSprite, BOX_SIZE, BOX_SIZE)
+
+entities.append(player)
+sprites.append(player)
 
 
 # Main loop
