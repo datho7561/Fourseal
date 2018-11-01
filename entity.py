@@ -57,19 +57,23 @@ class Entity(Sprite):
 
             for e in entities:
 
-                # If this entity isn't itself and its within range
+                # If this entity isn't itself and it is within range
                 if not self is e and self.distance(e) < self.range:
-                    e.health -= self.damage - e.resistance
 
-                    # If the entity gets killed, 
-                    if e.health <= 0:
-                        e.health = 0                # make sure health isn't negative
-                        self.killsSinceDeath += 1   # increment the killer's kills since death
-                        e.dead = True               # set the other entity to dead
-                        e.killsSinceDeath = 0       # the other entity's kill count is zero
-                    else:
-                        e.recoilTimer = RECOIL      # The entity must face recoil
-                        e.reDir = self.direction    # Pass own direction as entities recoil
+                    # Check if damage is actually going to be done. Otherwise,
+                    #  no recoil nor killing
+                    if not self.damage - e.resistance == 0:
+                        e.health -= self.damage - e.resistance
+
+                        # If the entity gets killed, 
+                        if e.health <= 0:
+                            e.health = 0                # make sure health isn't negative
+                            self.killsSinceDeath += 1   # increment the killer's kills since death
+                            e.dead = True               # set the other entity to dead
+                            e.killsSinceDeath = 0       # the other entity's kill count is zero
+                        else:
+                            e.recoilTimer = RECOIL      # The entity must face recoil
+                            e.reDir = self.direction    # Pass own direction as entities recoil
 
             self.attackTimer = self.attackSpeed
 

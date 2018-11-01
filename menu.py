@@ -25,7 +25,7 @@ def menu(screen):
     # Colour scheme generated with https://coolors.co/   
     backDarkC = Color("#594236")
     titleC = Color("#48acf0")
-    subtitleC = Color("#6f584b")
+    subtitleC = Color("#ff9b21")
     selectedC = Color("#6f584b")
 
     # Define the margin from the top and corner in pixels
