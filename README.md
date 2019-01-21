@@ -2,11 +2,11 @@
 
 ## ABOUT
 
-This is a top-down game where you play as one of four sword wielding classes (only 3 are implemented so far).
+This is a bird's eye view action game where you play as one of three sword wielding classes.
 
 Eventually, I intend for it to be a multiplayer PVP game.
 
-Right now, I have set up a demo, where you must defend the totem/obelisk in the center of the map from an onslaught of creatures.
+Right now, I have set up a demo, where you must defend the totem/obelisk in the center of the map from an onslaught of chess pieces.
 
 If you are interested in trying it out, please refer to the RUNNING IT section. Have fun!
 
@@ -33,25 +33,37 @@ This game is written in python 3 with pygame, which means that to run it you wil
     * Once you have done this, the game should have launched. Have fun!
 
 ## FAQ
-__Q:__ Why am I an oddly-shaped shrubbery?
-
-__A:__ You are, in fact, not a shrubbery, but a poorly drawn jubejube.
-
-__Q:__ Why, then, am I a jubejube?
+__Q:__ Why am I a jubejube?
 
 __A:__ Many of the images in the game are placeholders. I have worked on the back end of animating the characters, but haven't put in the time to create all the images needed to animate the characters. I expect that this will take some time for me to get around to.
 
 ## DEVELOPMENT
 
 This game is currently incredibly rough around the edges:
-* It probably contains bugs and exploits
+* It contains bugs and exploits
+    * Because directional isn't implemented yet, you can stand on the obelisk and hold attack
 * It is very lacking in visual effects
 * The HUD leaves a lot to be desired
-* Many things described in the source code are not implemented or only partially implemented
+* There are files of code which are written butuntested and not implemented in the main game
 
 I currently intend to be working on it in my spare time for fun. I will do my best to push or release stable versions of this game when it gets to that stage.
 
-If you are interested in what I have planned, please see `Decisions.txt` file or the `TODO:` notes scattered throughout the src. 
+If you are interested in what I have planned, please see `Decisions.txt` file or the `TODO:` notes scattered throughout the src.
+
+## CURRENT BARRIERS FOR DEVELOPMENT
+
+These are the issues I'm facing and why currently (20 Jan, 2019) I feel an inhibition to work on this at the moment.
+
+ * The core concept isn't as fun as I expected it to be, at least with the features that are available now
+    * I think fleshing out the special attacks, adding directional attacking, and adding better maps might help with this, but I'm not entirely sure
+ * I don't have sufficient time or skill to complete the character pixel art
+ * I need to redesign the main file in order to make it more maintainable
+     * This means spending a decent amount of time planning how to do this
+     * I will have to do a refactor, which will take a decent amount of coding
+     * This is also necessary in order to make a better menu system and configurable matches (i.e. different maps)
+ * I need to implement a good pathfinding algorithm for the enemies
+     * I have read a bit about A* with path smoothing and Theta* but need to read more in order to understand them and implement them
+ * I need to make a custom key mapping system and figure out the default mappings for up to 4 players
 
 ## MAP FILES
 
