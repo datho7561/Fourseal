@@ -129,9 +129,14 @@ playerHB = DamageBar(0, 0)
 playerCDB = DamageBar(0, 20, 10, Color(200, 200, 255), Color("blue"))
 totemHB = DamageBar(WIDTH//2, 0)
 
+# TODO: automate this
+#     : do for all players
+#     : read from a JSON file in order to allow user customization
 # Initialize the keyboard key variables
 # W, D, A, S, Shift, Space
+# U, I, O, P, N, M
 P1KEYS = [False, False, False, False, False, False]
+P2KEYS = [False, False, False, False, False, False]
 
 # Load the default map with all the default textures
 
@@ -157,12 +162,15 @@ playerType = menu(screen)
 
 # TODO: Finish character and game setup before starting the game
 
+player = None
+player2 = None
 
-# TODO: let player pick in windowed app
 if (playerType == "T"):
     player = Threemason(playerSprite, BOX_SIZE, BOX_SIZE)
 elif (playerType =="D"):
-    player = Dialic(playerSprite, BOX_SIZE, BOX_SIZE)
+    # If Dialic is selected, there are two players
+    player = Foursealer(playerSprite, BOX_SIZE, BOX_SIZE)
+    player2 = Foursealer(playerSprite, BOX_SIZE, BOX_SIZE)
 elif (playerType == "F"):
     player = Foursealer(playerSprite, BOX_SIZE, BOX_SIZE)
 else:
@@ -170,6 +178,11 @@ else:
 
 entities.append(player)
 sprites.append(player)
+
+if (not (player2 is None)):
+    entities.append(player2)
+    sprites.append(player2)
+    
 
 
 # Main loop
@@ -189,24 +202,42 @@ while True:
 
             elif event.type == pygame.KEYDOWN:
 
-                if event.key == 119:
+                if event.key == 119:        # P1 UP
                     # If 'w' is pressed
                     P1KEYS[0] = True
-                elif event.key == 100:
+                elif event.key == 100:      # P1 RIGHT
                     # If 'd' is pressed
                     P1KEYS[1] = True
-                elif event.key == 115:
+                elif event.key == 115:      # P1 DOWN
                     # If 's' is pressed
                     P1KEYS[2] = True
-                elif event.key == 97:
+                elif event.key == 97:       # P1 LEFT
                     # If 'a' is pressed
                     P1KEYS[3] = True
-                elif event.key == 304:
+                elif event.key == 304:      # P1 SPECIAL
                     # If 'Shift' is pressed
                     P1KEYS[4] = True
-                elif event.key == 32:
+                elif event.key == 32:       # P1 ATTACK
                     # If 'Space' is pressed
                     P1KEYS[5] = True
+                elif event.key == 117:      # P2 LEFT
+                    # If 'U' is pressed
+                    P2KEYS[0] = True
+                elif event.key == 105:      # P2 DOWN
+                    # If 'I' is pressed
+                    P2KEYS[1] = True
+                elif event.key == 111:      # P2 UP
+                    # If 'O' is pressed
+                    P2KEYS[2] = True
+                elif event.key == 112:      # P2 RIGHT
+                    # If 'P' is pressed
+                    P2KEYS[3] = True
+                elif event.key == 110:      # P2 ATTACK
+                    # If 'N' is pressed
+                    P2KEYS[4] = True
+                elif event.key == 109:      # P2 SPECIAL
+                    # If 'M' is pressed
+                    P2KEYS[5] = True
 
             elif event.type == pygame.KEYUP:
 
@@ -228,14 +259,36 @@ while True:
                 elif event.key == 32:
                     # If 'Space' is pressed
                     P1KEYS[5] = False
+                elif event.key == 117:      # P2 LEFT
+                    # If 'U' is pressed
+                    P2KEYS[0] = False
+                elif event.key == 105:      # P2 DOWN
+                    # If 'I' is pressed
+                    P2KEYS[1] = False
+                elif event.key == 111:      # P2 UP
+                    # If 'O' is pressed
+                    P2KEYS[2] = False
+                elif event.key == 112:      # P2 RIGHT
+                    # If 'P' is pressed
+                    P2KEYS[3] = False
+                elif event.key == 110:      # P2 ATTACK
+                    # If 'N' is pressed
+                    P2KEYS[4] = False
+                elif event.key == 109:      # P2 SPECIAL
+                    # If 'M' is pressed
+                    P2KEYS[5] = False
 
 
-        # TODO: code game logic
+
         ## GAME LOGIC ##
 
-        # Interpret player input
 
-        # Player 1
+
+        ### UPDATE THE PLAYERS ###
+
+
+
+        ### PLAYER 1 ###
 
         player1Dir = None
 
@@ -256,14 +309,48 @@ while True:
         elif P1KEYS[3]:
             player1Dir = Direction.LEFT
 
-        # TODO: update all the players
-        # Update the players
-
         if P1KEYS[5]:
-            # TODO: player shouldn't be able to attack totem
+            # TODO: verify this is fixed
+            ##  # TODO: player shouldn't be able to attack totem
             player.attack(entities, fgSprites)
 
         player.update(player1Dir, fgSprites, entities, usingSpecial = P1KEYS[4])
+
+
+
+        ### PLAYER 2 ###
+
+        # Check if the player even exists
+        if (not (player2 is None)):
+            
+            player2Dir = None
+
+            if P2KEYS[2] and P2KEYS[3]:
+                player2Dir = Direction.UP_RIGHT
+            elif P2KEYS[1] and P2KEYS[3]:
+                player2Dir = Direction.DOWN_RIGHT
+            elif P2KEYS[0] and P2KEYS[1]:
+                player2Dir = Direction.DOWN_LEFT
+            elif P2KEYS[0] and P2KEYS[2]:
+                player2Dir = Direction.UP_LEFT
+            elif P2KEYS[2]:
+                player2Dir = Direction.UP
+            elif P2KEYS[3]:
+                player2Dir = Direction.RIGHT
+            elif P2KEYS[1]:
+                player2Dir = Direction.DOWN
+            elif P2KEYS[0]:
+                player2Dir = Direction.LEFT
+
+            if P2KEYS[4]:
+                player2.attack(entities, fgSprites)
+
+            player2.update(player2Dir, fgSprites, entities, usingSpecial = P2KEYS[5])
+
+
+
+
+        
 
         # If it is time to add another foes, add one
         if (enemyCooldown == 0):
